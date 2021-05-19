@@ -44,7 +44,7 @@
  *
  * Note: Update also Version.h !
  */
-#define CONFIGURATION_ADV_H_VERSION 010100
+#define CONFIGURATION_ADV_H_VERSION 010109
 
 // @section temperature
 
@@ -189,9 +189,9 @@
 //This is for controlling a fan to cool down the stepper drivers
 //it will turn on when any driver is enabled
 //and turn off after the set amount of seconds from last driver being disabled again
-#define CONTROLLERFAN_PIN -1 //Pin used for the fan to cool controller (-1 to disable)
-#define CONTROLLERFAN_SECS 60 //How many seconds, after all motors were disabled, the fan should run
-#define CONTROLLERFAN_SPEED 255  // == full speed
+#define CONTROLLER_FAN_PIN -1 //Pin used for the fan to cool controller (-1 to disable)
+#define CONTROLLER_FAN_SECS 60 //How many seconds, after all motors were disabled, the fan should run
+#define CONTROLLER_FAN_SPEED 255  // == full speed
 
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
@@ -607,6 +607,9 @@
 // The minimum pulse width (in µs) for stepping a stepper.
 // Set this if you find stepping unreliable, or if using a very fast CPU.
 #define MINIMUM_STEPPER_PULSE 0 // (µs) The smallest stepper pulse allowed
+
+
+#define PROPORTIONAL_FONT_RATIO 1.0
 
 // @section temperature
 

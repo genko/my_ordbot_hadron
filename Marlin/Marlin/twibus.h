@@ -1,4 +1,4 @@
-/*
+/**
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
@@ -33,23 +33,30 @@
 typedef void (*twiReceiveFunc_t)(int bytes);
 typedef void (*twiRequestFunc_t)();
 
+#if ENABLED(MECHADUINO_I2C_COMMANDS)
+  typedef union {
+    float fval;
+    byte bval[sizeof(float)];
+  } i2cFloat;
+#endif
+
 #define TWIBUS_BUFFER_SIZE 32
 
 /**
  * TWIBUS class
  *
- * This class implements a wrapper around the two wire (I2C) bus, it allows
- * Marlin to send and request data from any slave device on the bus. This is
- * an experimental feature and it's inner workings as well as public facing
- * interface are prune to change in the future.
+ * This class implements a wrapper around the two wire (I2C) bus, allowing
+ * Marlin to send and request data from any slave device on the bus.
  *
- * The two main consumers of this class are M260 and M261, where M260 allows
- * Marlin to send a I2C packet to a device (please be aware that no repeated
- * starts are possible), this can be done in caching method by calling multiple
- * times M260 B<byte-1 value in base 10> or a one liner M260, have a look at
- * the gcode_M260() function for more information. M261 allows Marlin to
- * request data from a device, the received data is then relayed into the serial
- * line for host interpretation.
+ * The two main consumers of this class are M260 and M261. M260 provides a way
+ * to send an I2C packet to a device (no repeated starts) by caching up to 32
+ * bytes in a buffer and then sending the buffer.
+ * M261 requests data from a device. The received data is relayed to serial out
+ * for the host to interpret.
+ *
+ *  For more information see
+ *    - http://marlinfw.org/docs/gcode/M260.html
+ *    - http://marlinfw.org/docs/gcode/M261.html
  *
  */
 class TWIBus {
@@ -99,7 +106,7 @@ class TWIBus {
      *
      * @param c a data byte
      */
-    void addbyte(const char c);
+    void addbyte(const byte c);
 
     /**
      * @brief Add some bytes to the buffer
@@ -109,7 +116,7 @@ class TWIBus {
      * @param src source data address
      * @param bytes the number of bytes to add
      */
-    void addbytes(char src[], uint8_t bytes);
+    void addbytes(byte src[], uint8_t bytes);
 
     /**
      * @brief Add a null-terminated string to the buffer
@@ -172,7 +179,7 @@ class TWIBus {
      * @param bytes the number of bytes to request
      * @return the number of bytes captured to the buffer
      */
-    uint8_t capture(char *dst, const uint8_t bytes);
+    uint8_t capture(byte *dst, const uint8_t bytes);
 
     /**
      * @brief Flush the i2c bus.
@@ -239,4 +246,4 @@ class TWIBus {
     #endif
 };
 
-#endif //TWIBUS_H
+#endif // TWIBUS_H
